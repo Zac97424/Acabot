@@ -1,3 +1,3 @@
 # Acabot
 # Dependancies
-Discord.py
+discord.py

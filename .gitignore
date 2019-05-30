@@ -1,3 +1,5 @@
 AcabotToken.txt
 *.pyproj
 *.sln
+
+\.vs/
