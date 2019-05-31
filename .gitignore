@@ -3,3 +3,5 @@ AcabotToken.txt
 *.sln
 
 \.vs/
+
+src/__pycache__/
