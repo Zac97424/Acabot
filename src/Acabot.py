@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-from anarpoll import anarpoll
+from Anarpoll import anarpoll
 
 TOKEN = open("AcabotToken.txt", "r").read()
 client = commands.Bot(command_prefix='%')
