@@ -19,7 +19,7 @@ async def _anarpoll_impl(ctx, question, *args):
 	toSend = "{0} **{1}**".format(random.choice(ctx.bot.emojis), question)
 	actEmoji = 0
 	for arg in args:
-		toSend += '\n{0} {1}'.format(emojis[actEmoji], arg)
+		toSend += "\n{0} {1}".format(emojis[actEmoji], arg)
 		actEmoji += 1
 	msg = await ctx.send(toSend)
 	for arg in args:
@@ -34,7 +34,7 @@ class Anarpoll(commands.Cog):
 		await _anarpoll_impl(ctx, question, *args)
 
 	@commands.command()
-	async def anarpolls(self, ctx, question, minutes, *args):
+	async def anarpolls(self, ctx, question, seconds, *args):
 		await _anarpoll_impl(ctx, question, *args)
 
 	@commands.command()
