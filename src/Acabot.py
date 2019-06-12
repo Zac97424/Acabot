@@ -8,4 +8,8 @@ client.load_extension('Anarpoll')
 client.load_extension('Quit')
 client.load_extension('Hello')
 
+@client.event
+async def on_ready():
+	await client.change_presence(status=discord.Status.online, activity=discord.Game("être un Black Bloc"))
+
 client.run(TOKEN)
