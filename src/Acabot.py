@@ -10,6 +10,6 @@ client.load_extension('Hello')
 
 @client.event
 async def on_ready():
-	await client.change_presence(status=discord.Status.online, activity=discord.Game("être un Black Bloc"))
+	await client.change_presence(status=discord.Status.online, activity=discord.Game("être très mobile"))
 
 client.run(TOKEN)
