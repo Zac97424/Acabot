@@ -24,26 +24,80 @@ async def _anarpoll_impl(ctx, question, *args):
 	msg = await ctx.send(toSend)
 	for arg in args:
 		await msg.add_reaction(emojis.pop(0))
+	return msg
+
+class _AnarpollContainer:
+	def __init__(self, message, question, *propositions):
+		self.Message = message
+		self.Question = question
+		self.Propositions = [*propositions]
+
+def _anarpoll_findpoll(polls, question):
+	poll = None
+	hasFound = False
+	for Poll in polls:
+		if Poll.Question == question:
+			poll = Poll
+			hasFound = True
+			break
+	return poll, hasFound
 
 class Anarpoll(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
+		self.Polls = []
 
 	@commands.command()
 	async def anarpoll(self, ctx, question, *args):
-		await _anarpoll_impl(ctx, question, *args)
+		message = await _anarpoll_impl(ctx, question, *args)
+		self.Polls.append(_AnarpollContainer(message, question, *args))
 
 	@commands.command()
 	async def anarpolls(self, ctx, question, seconds, *args):
-		await _anarpoll_impl(ctx, question, *args)
+		message = await _anarpoll_impl(ctx, question, *args)
+		self.Polls.append(_AnarpollContainer(message, question, *args))
 
 	@commands.command()
 	async def anarpollm(self, ctx, question, minutes, *args):
-		await _anarpoll_impl(ctx, question, *args)
+		message = await _anarpoll_impl(ctx, question, *args)
+		self.Polls.append(_AnarpollContainer(message, question, *args))
 
 	@commands.command()
 	async def anarpollh(self, ctx, question, hours, *args):
-		await _anarpoll_impl(ctx, question, *args)
+		message = await _anarpoll_impl(ctx, question, *args)
+		self.Polls.append(_AnarpollContainer(message, question, *args))
+
+	@commands.command()
+	async def anarpoll_delete(self, ctx, question):
+		poll, hasFound = _anarpoll_findpoll(self.Polls, question)
+		if not hasFound:
+			await ctx.send("Wesh t'as cru je pouvais supprimer un poll qu'existe pas ? :thinking:")
+			return
+		self.Polls.remove(poll)
+		await ctx.send("C'est bon ! Le poll est supprimé ! :grin:")
+
+	@commands.command()
+	async def anarpoll_add(self, ctx, question, arg):
+		poll, hasFound = _anarpoll_findpoll(self.Polls, question)
+		if not hasFound:
+			await ctx.send("Désolé·e, je n'ai pas trouvé le poll demandé :cry:")
+			return
+		poll.Propositions.append(arg)
+		msg = await _anarpoll_impl(ctx, question, *poll.Propositions)
+		poll.Message = msg
+
+	@commands.command()
+	async def anarpoll_remove(self, ctx, question, arg):
+		poll, hasFound = _anarpoll_findpoll(self.Polls, question)
+		if not hasFound:
+			await ctx.send("Ton poll existe pas, déso pas déso :shrug:")
+			return
+		if poll.Propositions.count(arg) == 0:
+			await ctx.send("Excuses moi, mais ta proposition n'existe pas pour ce poll :neutral_face:")
+			return
+		poll.Propositions.remove(arg)
+		msg = await _anarpoll_impl(ctx, question, *poll.Propositions)
+		poll.Message = msg
 
 def setup(bot):
 	bot.add_cog(Anarpoll(bot))
